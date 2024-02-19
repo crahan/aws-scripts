@@ -38,4 +38,4 @@ for region in $regions; do
     fi
 done
 
-echo -e $ec2_data | tr -d '"'
+echo -e $ec2_data

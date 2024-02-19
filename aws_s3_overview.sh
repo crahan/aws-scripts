@@ -35,4 +35,4 @@ for bucket in $buckets; do
 done
 
 # Print data table
-echo -e $bucket_data | column -t -s ','
+echo -e $bucket_data

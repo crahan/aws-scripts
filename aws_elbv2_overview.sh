@@ -14,22 +14,21 @@ elbv2_data="Region,Name,Type,DNS,Proto,Port,Action\n"
 
 # Iterate over each region and load balancer
 for region in $regions; do
-  lbs_info=$(aws --profile $profile elbv2 describe-load-balancers --region "$region" 2>/dev/null | jq -r '.LoadBalancers[] | "\(.LoadBalancerName)\t\(.Type)\t\(.LoadBalancerArn)\t\(.DNSName)"')
+    lbs_info=$(aws --profile $profile elbv2 describe-load-balancers --region "$region" 2>/dev/null | jq -r '.LoadBalancers[] | "\(.LoadBalancerName)\t\(.Type)\t\(.LoadBalancerArn)\t\(.DNSName)"')
 
-  if [ -n "$lbs_info" ]; then
-    while read -r lb_info; do
-      lb_name=$(echo "$lb_info" | awk '{print $1}')
-      lb_type=$(echo "$lb_info" | awk '{print substr($2, 1, 3)}')
-      lb_arn=$(echo "$lb_info" | awk '{print $3}')
-      lb_dns=$(echo "$lb_info" | awk '{print $4}')
-      listeners=$(aws --profile $profile elbv2 describe-listeners --load-balancer-arn "$lb_arn" --region "$region" --query 'Listeners[].[Protocol,Port,DefaultActions[].Type]' | jq -r '.[] | [.[0], .[1], .[2][]] | @csv')
+    if [ -n "$lbs_info" ]; then
+        while read -r lb_info; do
+            lb_name=$(echo "$lb_info" | awk '{print $1}')
+            lb_type=$(echo "$lb_info" | awk '{print substr($2, 1, 3)}')
+            lb_arn=$(echo "$lb_info" | awk '{print $3}')
+            lb_dns=$(echo "$lb_info" | awk '{print $4}')
+            listeners=$(aws --profile $profile elbv2 describe-listeners --load-balancer-arn "$lb_arn" --region "$region" --query 'Listeners[].[Protocol,Port,DefaultActions[].Type]' | jq -r '.[] | [.[0], .[1], .[2][]] | @csv')
 
-      while read -r listener; do
-       # Append load balancer details to data table
-       elbv2_data+="$region,$lb_name,$lb_type,$lb_dns,$listener\n"
-      done <<< "$listeners"
-    done <<< "$lbs_info"
-  fi
+            while read -r listener; do
+                elbv2_data+="$region,$lb_name,$lb_type,$lb_dns,$listener\n"
+            done <<< "$listeners"
+        done <<< "$lbs_info"
+    fi
 done
 
-echo -e $elbv2_data | tr -d '"'
+echo -e $elbv2_data
