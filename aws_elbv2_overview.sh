@@ -10,7 +10,7 @@ profile=${aws_profile:-"default"}
 regions=$(aws --profile $profile ec2 describe-regions --query "Regions[].RegionName" --output text --region=us-east-1)
 
 # Data table header
-elbv2_data="Region,Name,Type,DNS,Proto,Port,Action\n"
+elbv2_data="Region,Name,Type,DNS Name,Proto,Port,Action\n"
 
 # Iterate over each region and load balancer
 for region in $regions; do
