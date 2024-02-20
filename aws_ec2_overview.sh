@@ -10,7 +10,7 @@ profile=${aws_profile:-"default"}
 regions=$(aws --profile $profile ec2 describe-regions --query "Regions[].RegionName" --output text --region=us-east-1)
 
 # Data table header
-ec2_data="Region,Instance ID,Instance Name,State,VPC ID,IMDS State,IMDS Token,Public DNS Name,Public IP,Instance Profile ARN\n"
+ec2_data="Region,Instance ID,Instance Name,State,VPC ID,IMDS State,IMDS Token,Public DNS Name,Public IP,IAM Role\n"
 
 # Iterate over each region and EC2 instance
 for region in $regions; do
