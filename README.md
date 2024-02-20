@@ -1,4 +1,4 @@
-# aws-scripts
+# AWS Scripts
 
 Shell scripts to retrieve high-level details across all enabled AWS regions for:
 
