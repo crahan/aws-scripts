@@ -30,6 +30,11 @@ for bucket in $buckets; do
   encryption=$(aws --profile $profile s3api get-bucket-encryption --bucket $bucket --query 'ServerSideEncryptionConfiguration.Rules[0].ApplyServerSideEncryptionByDefault.SSEAlgorithm' --output text 2>/dev/null)
   [ "$encryption" != "None" ] && encryption="Yes" || encryption="No"
 
+  # Truncate bucket name
+  if [ -n "$bucket_name_max_length" ] && [ ${#bucket} -gt $bucket_name_max_length ]; then
+    bucket="${bucket:0:$bucket_name_max_length}..."
+  fi
+
   # Append bucket details to data table
   bucket_data+="$bucket,$secure_transport,$versioning,$logging,$encryption\n"
 done
