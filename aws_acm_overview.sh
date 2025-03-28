@@ -3,6 +3,9 @@
 #  2025-03-28 - CraHan <crahan@n00.be>
 # =============================================================================
 
+# Retrieve region list
+regions=$(aws ec2 describe-regions --query "Regions[].RegionName" --output text --region=us-east-1)
+
 for region in $regions; do
   echo "===== Region: $region"
 
