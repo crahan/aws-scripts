@@ -23,7 +23,7 @@ aws cloudfront list-distributions --output json | jq -r '.DistributionList.Items
   # Output
   echo "===== CloudFront Distribution: $id"
   echo "- DefaultRootObject: $defaultRootObject"
-  echo "- WebACLAttached: $webACLId"
+  echo "- WebACLId: $webACLId"
   echo "- LoggingEnabled: $loggingEnabled"
   echo "- ViewerProtocolPolicy: $viewerProtocolPolicy"
   echo "- ViewerCertMinProtoVer: $viewerCertMinProtoVer"
