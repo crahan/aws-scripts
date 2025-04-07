@@ -9,8 +9,8 @@ aws cloudfront list-distributions --output json | jq -r '.DistributionList.Items
   dist=$(aws cloudfront get-distribution --id "$id" --output json)
 
   # Extract values
-  defaultRootObject=$(echo "$dist" | jq -r '.Distribution.DefaultRootObject // "None"')
-  webACLId=$(echo "$dist" | jq -r '.Distribution.WebACLId // "None"')
+  defaultRootObject=$(echo "$dist" | jq -r '.Distribution.DistributionConfig.DefaultRootObject // "None"')
+  webACLId=$(echo "$dist" | jq -r '.Distribution.DistributionConfig.WebACLId // "None"')
   loggingEnabled=$(echo "$dist" | jq -r '.Distribution.DistributionConfig.Logging.Enabled // "None"')
   viewerProtocolPolicy=$(echo "$dist" | jq -r '.Distribution.DistributionConfig.DefaultCacheBehavior.ViewerProtocolPolicy // "None"')
   viewerCertMinProtoVer=$(echo "$dist" | jq -r '.Distribution.DistributionConfig.ViewerCertificate.MinimumProtocolVersion // "None"')
