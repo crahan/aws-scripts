@@ -15,6 +15,7 @@ aws cloudfront list-distributions --output json | jq -r '.DistributionList.Items
   viewerProtocolPolicy=$(echo "$dist" | jq -r '.Distribution.DistributionConfig.DefaultCacheBehavior.ViewerProtocolPolicy // "None"')
   viewerCertMinProtoVer=$(echo "$dist" | jq -r '.Distribution.DistributionConfig.ViewerCertificate.MinimumProtocolVersion // "None"')
   originProtocolPolicy=$(echo "$dist" | jq -r '.Distribution.DistributionConfig.Origins.Items[0].CustomOriginConfig.OriginProtocolPolicy // "None"')
+  staging=$(echo "$dist" | jq -r '.Distribution.DistributionConfig.Staging // "None"')
 
   # Join SSL protocols into pipe-separated string or default to None
   sslProtocols=$(echo "$dist" | jq -r '.Distribution.DistributionConfig.Origins.Items[0].CustomOriginConfig.OriginSslProtocols.Items[]? // empty' | paste -sd'|' -)
@@ -29,5 +30,6 @@ aws cloudfront list-distributions --output json | jq -r '.DistributionList.Items
   echo "- ViewerCertMinProtoVer: $viewerCertMinProtoVer"
   echo "- OriginProtocolPolicy: $originProtocolPolicy"
   echo "- OriginSslProtocols: $sslProtocols"
+  echo "- Staging: $staging"
   echo ""
 done
